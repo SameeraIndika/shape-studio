@@ -76,9 +76,9 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
               ${showModalPopup ? "opacity-100" : "opacity-0"}
             `}
           >
-            <div className="relative flex flex-col w-full bg-tc_white translate rounded-md shadow-md">
-              <div className="relative flex justify-center items-center w-full gap-x-2 px-4 py-4 border-b border-tc_border/60">
-                <h2 className="font-sans text-base font-semibold text-tc_text_primary cursor-default">
+            <div className="relative flex flex-col w-full bg-tc_primary translate rounded-md shadow-md">
+              <div className="relative flex justify-center items-center w-full gap-x-2 px-4 py-4 border-b border-tc_border/10">
+                <h2 className="font-sans text-base font-semibold text-tc_text_accent cursor-default">
                   {title}
                 </h2>
                 <div className="absolute right-4 flex text-tc_error">
@@ -107,32 +107,38 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
                 </div>
               )}
               {children && (
-                <div className="relative flex flex-col justify-center items-center w-full h-fit px-4 py-10 gap-y-4 border-b border-tc_border/60">
+                <div
+                  className={`relative flex flex-col justify-center items-center w-full h-fit px-4 py-5 gap-y-4 ${
+                    cancelButton || actionButton ? "border-b" : "border-none"
+                  } border-tc_border/10`}
+                >
                   {children}
                 </div>
               )}
-              {(cancelButton || actionButton) && (
-                <div className="relative grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 px-4 py-4">
-                  {cancelButton && (
-                    <Button
-                      type="button"
-                      label="No, Cancel"
-                      buttonWidthClass="w-full"
-                      colorvariant="outline-primary"
-                      onClick={onCancel}
-                    />
-                  )}
-                  {actionButton && (
-                    <Button
-                      type="button"
-                      label={actionButtonLabel}
-                      buttonWidthClass="w-full"
-                      colorvariant={actionButtonColorVarient}
-                      onClick={onAction}
-                    />
-                  )}
-                </div>
-              )}
+              <div
+                className={`relative grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-4 px-4 ${
+                  cancelButton || actionButton ? "py-4" : "py-0.5"
+                }`}
+              >
+                {cancelButton && (
+                  <Button
+                    type="button"
+                    label="No, Cancel"
+                    buttonWidthClass="w-full"
+                    colorvariant="outline-primary"
+                    onClick={onCancel}
+                  />
+                )}
+                {actionButton && (
+                  <Button
+                    type="button"
+                    label={actionButtonLabel}
+                    buttonWidthClass="w-full"
+                    colorvariant={actionButtonColorVarient}
+                    onClick={onAction}
+                  />
+                )}
+              </div>
             </div>
           </div>
         </div>
