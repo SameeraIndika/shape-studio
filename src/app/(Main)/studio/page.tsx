@@ -413,7 +413,7 @@ export default function Canvas() {
         >
           <div className="flex flex-col w-full gap-y-2">
             {savedProjects.length === 0 ? (
-              <p className="w-full font-sans text-15 font-normal text-tc_text_accent text-center">
+              <p className="w-full px-4 py-8 font-sans text-15 font-normal text-tc_text_accent text-center">
                 No saved designs
               </p>
             ) : (
