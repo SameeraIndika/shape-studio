@@ -86,6 +86,7 @@ module.exports = {
           red: "#E05353", // Soft red
           blue: "#4A90E2", // Sky blue
           orange: "#D6883E", // Muted orange
+          gray: "#2b2b2b", // Code block background
         },
 
         // Shadows and highlights

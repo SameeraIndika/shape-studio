@@ -23,6 +23,7 @@ import "react-resizable/css/styles.css";
 import ModalPopup from "@/components/modals/ModalPopup";
 import ToastyAlertContainer from "@/components/spinners/ToastyAlertContainer";
 import { Button } from "@/components/buttons/Button";
+
 import { toastAlert, ToastVarient } from "@/utils/toastAlertVariants";
 
 type Shape = {
@@ -53,6 +54,13 @@ export default function Canvas() {
 
   useEffect(() => {
     localStorage.setItem("designShapes", JSON.stringify(shapes));
+  }, [shapes]);
+
+  useEffect(() => {
+    const existingProjects = JSON.parse(
+      localStorage.getItem("designProjects") || "{}"
+    );
+    setSavedProjects(Object.keys(existingProjects));
   }, [shapes]);
 
   // Create new Project
@@ -223,14 +231,6 @@ export default function Canvas() {
     localStorage.setItem("designProjects", JSON.stringify(existingProjects));
     alert("Design deleted!");
   };
-
-  // Load saved project names when the component mounts
-  useEffect(() => {
-    const existingProjects = JSON.parse(
-      localStorage.getItem("designProjects") || "{}"
-    );
-    setSavedProjects(Object.keys(existingProjects));
-  }, [shapes]);
 
   // Close modal popup
   const closeModalPopup = () => {
