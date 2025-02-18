@@ -134,24 +134,38 @@ export default function Canvas() {
       link.click();
     }
   };
+  
+  const [currentProject, setCurrentProject] = useState<string | null>(null);
 
-  const saveDesign = () => {
+  // Modified saveDesign function
+const saveDesign = () => {
+  const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+
+  if (currentProject) {
+    // If there's an existing project loaded, update it without prompting
+    existingProjects[currentProject] = shapes;
+    localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+    alert("Design updated!");
+  } else {
+    // If it's a new project, prompt for a name
     const projectName = prompt("Enter project name:");
     if (!projectName) return;
-  
-    const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+
     existingProjects[projectName] = shapes;
-  
     localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+    setCurrentProject(projectName);  // Set the current project after saving it
     alert("Design saved!");
-  };
+  }
+};
   
-  const loadDesign = (projectName: string) => {
-    const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
-    if (existingProjects[projectName]) {
-      setShapes(existingProjects[projectName]);
-    }
-  };
+  // Function to load a design and set it as the current project
+const loadDesign = (projectName: string) => {
+  const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+  if (existingProjects[projectName]) {
+    setShapes(existingProjects[projectName]);
+    setCurrentProject(projectName);  // Set the current project when loading
+  }
+};
   
   const deleteDesign = (projectName: string) => {
     const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
@@ -167,12 +181,28 @@ useEffect(() => {
   const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
   setSavedProjects(Object.keys(existingProjects));
 }, [shapes]);
-  
+  // new project
+const newProject = () => {
+  const confirmNew = window.confirm("Are you sure you want to start a new project? Unsaved changes will be lost!");
+  if (confirmNew) {
+    setShapes([]); // Clear the canvas
+  }
+};
+
 
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between w-full min-h-[calc(100vh-0px)] gap-4">
       <div className="relative flex flex-col sm:justify-between w-full sm:w-24 h-fit sm:h-full rounded-lg gap-4 p-4 bg-tc_black bg-opacity-40">
         <div className="flex sm:flex-col w-full gap-4">
+        <Button
+  type="button"
+  buttonWidthClass="w-16 sm:w-full"
+  buttonHeightClass="h-16"
+  colorvariant="error"
+  helpText="New Project"
+  onClick={newProject}
+/>
+
         <Button
         type="button"
         buttonWidthClass="w-16 sm:w-full"
