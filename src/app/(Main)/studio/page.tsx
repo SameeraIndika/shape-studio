@@ -5,14 +5,22 @@ import React, { useState, useEffect } from "react";
 import html2canvas from "html2canvas";
 import Draggable from "react-draggable";
 import { ResizableBox } from "react-resizable";
-import { Circle, Download, Redo, RotateCcw, Square, Undo } from "lucide-react";
+import {
+  Circle,
+  Download,
+  Redo,
+  RotateCcw,
+  Square,
+  Triangle,
+  Undo,
+} from "lucide-react";
 import "react-resizable/css/styles.css";
 
 import { Button } from "@/components/buttons/Button";
 
 type Shape = {
   id: number;
-  type: "rectangle" | "circle";
+  type: "rectangle" | "circle" | "triangle";
   x: number;
   y: number;
   width: number;
@@ -34,7 +42,7 @@ export default function Canvas() {
   }, [shapes]);
 
   // Add shape
-  const addShape = (type: "rectangle" | "circle") => {
+  const addShape = (type: "rectangle" | "circle" | "triangle") => {
     const newShape: Shape = {
       id: Date.now(),
       type,
@@ -120,7 +128,7 @@ export default function Canvas() {
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between w-full h-full gap-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between w-full min-h-[calc(100vh-0px)] gap-4">
       <div className="relative flex flex-col sm:justify-between w-full sm:w-24 h-fit sm:h-full rounded-lg gap-4 p-4 bg-tc_black bg-opacity-40">
         <div className="flex sm:flex-col w-full gap-4">
           <Button
@@ -149,13 +157,26 @@ export default function Canvas() {
             iconHeight={34}
             onClick={() => addShape("circle")}
           />
+          <Button
+            type="button"
+            buttonWidthClass="w-16 sm:w-full"
+            buttonHeightClass="h-16"
+            colorvariant="primary"
+            toolTipId="triangle"
+            helpText="Triangle"
+            icon={Triangle}
+            iconPosition="center"
+            iconWidth={34}
+            iconHeight={34}
+            onClick={() => addShape("triangle")}
+          />
         </div>
         <div className="flex sm:flex-col w-full gap-4">
           <Button
             type="button"
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
-            colorvariant="primary"
+            colorvariant="info"
             toolTipId="undo"
             helpText="Undo"
             icon={Undo}
@@ -168,7 +189,7 @@ export default function Canvas() {
             type="button"
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
-            colorvariant="primary"
+            colorvariant="info"
             toolTipId="redo"
             helpText="Redo"
             icon={Redo}
@@ -181,7 +202,7 @@ export default function Canvas() {
             type="button"
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
-            colorvariant="primary"
+            colorvariant="error"
             toolTipId="reset"
             helpText="Reset"
             icon={RotateCcw}
@@ -194,7 +215,7 @@ export default function Canvas() {
             type="button"
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
-            colorvariant="primary"
+            colorvariant="success"
             toolTipId="download"
             helpText="Download"
             icon={Download}
@@ -230,7 +251,11 @@ export default function Canvas() {
                 >
                   <div
                     className={`${
-                      shape.type === "circle" ? "rounded-full" : ""
+                      shape.type === "circle"
+                        ? "rounded-full"
+                        : shape.type === "triangle"
+                        ? "clip-triangle"
+                        : ""
                     }`}
                     style={{
                       width: "100%",
@@ -240,7 +265,9 @@ export default function Canvas() {
                           ? "#00c696"
                           : shape.type === "rectangle"
                           ? "#6366f1"
-                          : "white",
+                          : shape.type === "triangle"
+                          ? "#FFFF00"
+                          : "#ffffff",
                     }}
                   />
                 </ResizableBox>

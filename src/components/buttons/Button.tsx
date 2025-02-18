@@ -18,6 +18,8 @@ export type ColorVariantType =
   | "outline-warning"
   | "error"
   | "outline-error"
+  | "info"
+  | "outline-info"
   | "light"
   | "outline-light"
   | "link";
@@ -49,6 +51,10 @@ const getColorVariant = (colorvariant?: ColorVariantType) => {
       return "bg-tc_error hover:opacity-95 text-tc_white";
     case "outline-error":
       return "text-tc_error hover:text-tc_white border border-tc_error hover:bg-tc_error";
+    case "info":
+      return "bg-tc_info hover:opacity-95 text-tc_white";
+    case "outline-info":
+      return "text-tc_info hover:text-tc_white border border-tc_info hover:bg-tc_error";
     case "light":
       return "bg-tc_white hover:opacity-95 text-tc_primary";
     case "outline-light":
