@@ -135,10 +135,52 @@ export default function Canvas() {
     }
   };
 
+  const saveDesign = () => {
+    const projectName = prompt("Enter project name:");
+    if (!projectName) return;
+  
+    const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+    existingProjects[projectName] = shapes;
+  
+    localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+    alert("Design saved!");
+  };
+  
+  const loadDesign = (projectName: string) => {
+    const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+    if (existingProjects[projectName]) {
+      setShapes(existingProjects[projectName]);
+    }
+  };
+  
+  const deleteDesign = (projectName: string) => {
+    const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+    delete existingProjects[projectName];
+    localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+    alert("Design deleted!");
+  };
+
+  const [savedProjects, setSavedProjects] = useState<string[]>([]);
+
+// Load saved project names when the component mounts
+useEffect(() => {
+  const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+  setSavedProjects(Object.keys(existingProjects));
+}, [shapes]);
+  
+
   return (
     <div className="flex flex-col sm:flex-row sm:justify-between w-full min-h-[calc(100vh-0px)] gap-4">
       <div className="relative flex flex-col sm:justify-between w-full sm:w-24 h-fit sm:h-full rounded-lg gap-4 p-4 bg-tc_black bg-opacity-40">
         <div className="flex sm:flex-col w-full gap-4">
+        <Button
+        type="button"
+        buttonWidthClass="w-16 sm:w-full"
+        buttonHeightClass="h-16"
+        colorvariant="success"
+        helpText="Save Design"
+        onClick={saveDesign}
+      />
           <Button
             type="button"
             buttonWidthClass="w-16 sm:w-full"
@@ -238,6 +280,24 @@ export default function Canvas() {
         <h2 className="font-semibold text-xl text-tc_accent capitalize">
           Shape Studio Design Editor
         </h2>
+        {/* List Saved Designs */}
+      <div>
+        <h3 className="text-white font-semibold">Saved Designs</h3>
+        {savedProjects.length === 0 ? (
+          <p className="text-gray-400 text-sm">No saved designs</p>
+        ) : (
+          savedProjects.map((project) => (
+            <div key={project} className="flex justify-between items-center">
+              <button className="text-blue-400" onClick={() => loadDesign(project)}>
+                {project}
+              </button>
+              <button className="text-red-400 ml-2" onClick={() => deleteDesign(project)}>
+                ✖
+              </button>
+            </div>
+          ))
+        )}
+      </div>
         <div
           id="canvas-area"
           className="border-2 border-dashed border-tc_accent w-full h-full rounded-lg relative bg-transparent"
