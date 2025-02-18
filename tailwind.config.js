@@ -83,11 +83,11 @@ module.exports = {
 
         // Custom accent palette
         tc_custom: {
-          purple: "#5A4BAF", // Muted purple
+          purple: "#6366f1", // Creamy purple
+          green: "#00c696", // Creamy green
           indigo: "#484C7F", // Soft indigo
           red: "#E05353",
           yellow: "#D6A520", // Soft yellow
-          green: "#3D9B6D", // Muted green
           blue: "#4A90E2",
           orange: "#D6883E", // Muted orange
         },

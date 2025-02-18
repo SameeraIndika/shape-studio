@@ -63,9 +63,12 @@ export interface IButtonProps {
   isLink?: boolean;
   colorvariant?: ColorVariantType;
   buttonWidthClass?: string;
+  buttonHeightClass?: string;
   label?: string;
   icon?: LucideIcon;
-  iconPosition?: "left" | "right";
+  iconPosition?: "left" | "right" | "center";
+  iconWidth?: number;
+  iconHeight?: number;
   onClick?: () => void;
 }
 
@@ -74,9 +77,12 @@ export const Button = ({
   isLink = false,
   colorvariant = "primary",
   buttonWidthClass = "w-fit",
+  buttonHeightClass,
   label,
   icon: Icon,
   iconPosition = "left",
+  iconWidth = 22,
+  iconHeight = 22,
   onClick,
   ...props
 }: IButtonProps) => {
@@ -87,13 +93,30 @@ export const Button = ({
       className={`      
       flex items-center gap-x-1 rounded-md transition-all duration-200 ease-linear font-medium text-15 capitalize whitespace-nowrap
       ${isLink ? "" : "h-10 py-2 px-4"}
-      ${Icon ? "justify-start" : "justify-center"}
-      ${getColorVariant(colorvariant)} ${buttonWidthClass}`}
+      ${
+        iconPosition == "left"
+          ? "justify-start"
+          : iconPosition == "right"
+          ? "justify-end"
+          : !label && iconPosition == "center"
+          ? "justify-center"
+          : ""
+      }
+      ${getColorVariant(
+        colorvariant
+      )} ${buttonWidthClass} ${buttonHeightClass}`}
       onClick={onClick}
     >
-      {Icon && iconPosition == "left" && <Icon width={22} height={22} />}
-      {label}
-      {Icon && iconPosition == "right" && <Icon width={22} height={22} />}
+      {Icon && iconPosition == "left" && (
+        <Icon width={iconWidth} height={iconHeight} />
+      )}
+      {label && label}{" "}
+      {Icon && iconPosition == "center" && (
+        <Icon width={iconWidth} height={iconHeight} />
+      )}
+      {Icon && iconPosition == "right" && (
+        <Icon width={iconWidth} height={iconHeight} />
+      )}
     </button>
   );
 };
