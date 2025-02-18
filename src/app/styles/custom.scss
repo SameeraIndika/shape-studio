@@ -1,7 +1,66 @@
 @import "variables";
 @import "mixins";
 
+/* ==================== SHAPES STYLES ==================== */
+
 // Triangle shape
 .clip-triangle {
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+}
+
+/* ==================== TOASTY STYLES ==================== */
+
+// Toastify alert container
+.Toastify__toast {
+  padding: 0;
+  font-family: $_font_inter;
+  font-weight: $_fw_medium;
+  font-size: $_fs_15;
+  color: $_tc_white;
+  width: 500px;
+  &-icon {
+    background-color: $_tc_transparent;
+    color: $_tc_white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-left: 1.25rem;
+  }
+  @media (max-width: 520px) {
+    width: 95%;
+    margin-top: 0.625rem;
+  }
+}
+
+// Toasty error
+.toast-error {
+  background: $_tc_error !important;
+  color: $_tc_white;
+}
+
+// Toasty success
+.toast-success {
+  background: $_tc_success !important;
+  color: $_tc_white;
+}
+
+// Toasty warn
+.toast-warn {
+  background: $_tc_warning !important;
+  color: $_tc_white;
+}
+
+// Toasty info
+.toast-info {
+  background: $_tc_info !important;
+  color: $_tc_white;
+}
+
+// Toasty default
+.toast-default {
+  background-color: $_tc_primary !important;
+  color: $_tc_white;
 }

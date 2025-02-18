@@ -20,8 +20,10 @@ import {
 } from "lucide-react";
 import "react-resizable/css/styles.css";
 
-import { Button } from "@/components/buttons/Button";
 import ModalPopup from "@/components/modals/ModalPopup";
+import ToastyAlertContainer from "@/components/spinners/ToastyAlertContainer";
+import { Button } from "@/components/buttons/Button";
+import { toastAlert, ToastVarient } from "@/utils/toastAlertVariants";
 
 type Shape = {
   id: number;
@@ -148,7 +150,7 @@ export default function Canvas() {
     if (currentProject) {
       existingProjects[currentProject] = shapes;
       localStorage.setItem("designProjects", JSON.stringify(existingProjects));
-      alert("Design updated!");
+      toastAlert("Design updated successfully!", ToastVarient.SUCCESS);
     } else {
       const projectName = prompt("Enter project name:");
       if (!projectName) return;
@@ -156,7 +158,7 @@ export default function Canvas() {
       existingProjects[projectName] = shapes;
       localStorage.setItem("designProjects", JSON.stringify(existingProjects));
       setCurrentProject(projectName);
-      alert("Design saved!");
+      toastAlert("Design saved successfully!", ToastVarient.SUCCESS);
     }
   };
 
@@ -441,6 +443,9 @@ export default function Canvas() {
           </div>
         </ModalPopup>
       )}
+
+      {/* Toasty Alert */}
+      <ToastyAlertContainer />
     </>
   );
 }
