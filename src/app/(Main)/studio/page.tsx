@@ -186,6 +186,7 @@ export default function Canvas() {
     setCurrentProject(projectName);
     setIsModalOpen(false);
     toastAlert("Design saved successfully!", ToastVarient.SUCCESS);
+    setSavedProjects(Object.keys(existingProjects));
   };
 
   // Download design as PNG
