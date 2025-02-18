@@ -1,0 +1,81 @@
+// Background colors
+$_tc_background_light: #f6f9ff; // Light background
+$_tc_background_dark: #f3f3f3; // Dark background
+
+// Base colors
+$_tc_primary: #333333; // Dark black
+$_tc_secondary: #4b5462; // Light black
+$_tc_accent: #a5a9b1; // Gray
+$_tc_success: #4ab07c; // Green
+$_tc_warning: #db8c15; // Orange
+$_tc_error: #d45058; // Red
+$_tc_info: #1890ff; // Blue
+$_tc_muted: #d1d5db; // Muted gray
+$_tc_white: #ffffff; // Pure white
+$_tc_black: #000000; // Pure black
+$_tc_transparent: rgba(0, 0, 0, 0); // Transparent
+
+// Text colors
+$_tc_text_primary: #333333; // Dark black text
+$_tc_text_secondary: #4B5462; // Light black text
+$_tc_text_accent: #A5A9B1; // Gray
+$_tc_text_muted: #d1d5db; // Muted gray for less important text
+
+// Border and outline
+$_tc_border: #d1d5db; // Light gray
+$_tc_border_50: rgba(209, 213, 219, 0.5); // Light gray (50% transparent)
+
+// Font Families
+$_font_inter: "Inter", sans-serif; // Inter
+
+// Border radius
+$_br_rounded_none: 0; // 0px
+$_br_rounded_sm: 0.125rem; // 2px
+$_br_rounded: 0.25rem; // 4px
+$_br_rounded_md: 0.375rem; // 6px
+$_br_rounded_lg: 0.5rem; // 8px
+$_br_rounded_xl: 0.75rem; // 12px
+$_br_rounded_2xl: 1rem; // 16px
+$_br_rounded_3xl: 1.5rem; // 24px
+$_br_rounded_full: 9999px; // Full
+$_br_rounded_tl: 0.25rem 0 0 0; // Top left radius only (4px)
+$_br_rounded_tr: 0 0.25rem 0 0; // Top right radius only (4px)
+$_br_rounded_bl: 0 0 0.25rem 0; // Bottom left radius only (4px)
+$_br_rounded_br: 0 0 0 0.25rem; // Bottom right radius only (4px)
+
+// Box shadows
+$_ds_1: 0 5px 10px 0 rgba(30, 41, 59, 0.05);
+$_ds_2: 0 2px 4.6px 0 rgba(22, 51, 98, 0.08);
+
+// Overlays
+$_ol_1: rgba(20, 20, 20, 0.5);
+
+// Font sizes
+$_fs_10: 0.625rem; // 10px
+$_fs_xs: 0.75rem; // 12px
+$_fs_13: 0.8125rem; // 13px
+$_fs_sm: 0.875rem; // 14px
+$_fs_15: 0.938rem; // 15px
+$_fs_base: 1rem; // 16px
+$_fs_lg: 1.125rem; // 18px
+$_fs_xl: 1.25rem; // 20px
+$_fs_2xl: 1.5rem; // 24px
+$_fs_3xl: 1.875rem; // 30px
+$_fs_32: 2rem; // 32px
+$_fs_4xl: 2.25rem; // 36px
+$_fs_5xl: 3rem; // 48px
+$_fs_6xl: 3.75rem; // 60px
+$_fs_7xl: 4.5rem; // 72px
+$_fs_8xl: 6rem; // 96px
+$_fs_9xl: 8rem; // 128px
+
+// Font weights
+$_fw_thin: 100; // 100
+$_fw_extralight: 200; // 200
+$_fw_light: 300; // 300
+$_fw_normal: 400; // 400
+$_fw_medium: 500; // 500
+$_fw_semibold: 600; // 600
+$_fw_bold: 700; // 700
+$_fw_extrabold: 800; // 800
+$_fw_black: 900; // 900
