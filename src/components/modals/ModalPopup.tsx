@@ -108,7 +108,7 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
               )}
               {children && (
                 <div
-                  className={`relative flex flex-col justify-center items-center w-full h-fit px-4 py-5 gap-y-4 ${
+                  className={`relative flex flex-col w-full max-h-[calc(100vh-400px)] px-4 py-5 gap-y-4 overflow-y-auto ${
                     cancelButton || actionButton ? "border-b" : "border-none"
                   } border-tc_border/10`}
                 >
