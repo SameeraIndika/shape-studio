@@ -16,6 +16,7 @@ import {
   Square,
   Triangle,
   Undo,
+  X,
 } from "lucide-react";
 import "react-resizable/css/styles.css";
 
@@ -401,41 +402,39 @@ export default function Canvas() {
           </div>
         </div>
       </div>
+
+      {/* Modal Popup */}
       {isModalOpen && (
         <ModalPopup
           title="Your saved projects"
           closeButton
           onCancel={closeModalPopup}
-          actionButtonLabel="Yes, Delete"
-          actionButtonColorVarient="error"
-          // onAction={() => handleOnDeleteTransaction(selectedTransaction)}
           isOpen={isModalOpen}
         >
-          <div>
-            <h3 className="text-white font-semibold">Saved Designs</h3>
+          <div className="flex flex-col w-full gap-y-2">
             {savedProjects.length === 0 ? (
-              <p className="text-gray-400 text-sm">No saved designs</p>
+              <p className="w-full font-sans text-15 font-normal text-tc_text_accent text-center">
+                No saved designs
+              </p>
             ) : (
               savedProjects.map((project) => (
                 <div
                   key={project}
-                  className="flex justify-between items-center"
+                  onClick={() => {
+                    loadDesign(project);
+                    setIsModalOpen(false);
+                  }}
+                  className="flex justify-between items-center w-full gap-x-2 px-4 py-2 rounded-md border border-tc_border/10 bg-tc_black/50 hover:bg-tc_black/60 font-sans text-15 font-normal text-tc_text_accent cursor-pointer transition-all duration-200 ease-linear"
                 >
-                  <button
-                    className="text-blue-400"
-                    onClick={() => {
-                      loadDesign(project);
-                      setIsModalOpen(false);
-                    }}
-                  >
-                    {project}
-                  </button>
-                  <button
-                    className="text-red-400 ml-2"
-                    onClick={() => deleteDesign(project)}
-                  >
-                    ✖
-                  </button>
+                  {project}
+                  <div className="flex text-tc_error">
+                    <button
+                      onClick={() => deleteDesign(project)}
+                      className="flex justify-center items-center w-5 h-5"
+                    >
+                      <X width={16} height={16} />
+                    </button>
+                  </div>
                 </div>
               ))
             )}

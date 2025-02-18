@@ -78,7 +78,7 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
           >
             <div className="relative flex flex-col w-full bg-tc_primary translate rounded-md shadow-md">
               <div className="relative flex justify-center items-center w-full gap-x-2 px-4 py-4 border-b border-tc_border/10">
-                <h2 className="font-sans text-base font-semibold text-tc_text_accent cursor-default">
+                <h2 className="font-sans text-base font-semibold text-tc_text_accent capitalize cursor-default">
                   {title}
                 </h2>
                 <div className="absolute right-4 flex text-tc_error">
