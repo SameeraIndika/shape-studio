@@ -100,7 +100,7 @@ export default function Documentation() {
         </h3>
         <p className="flex w-full font-normal text-15 text-tc_muted">
           Next, install all the required dependencies for the project. Make sure
-          you're in the project directory, and run:
+          you&apos;re in the project directory, and run:
         </p>
         <CodeBlock code="npm install" language={"javascript"} />
         <p className="flex w-full font-normal text-15 text-tc_muted">
