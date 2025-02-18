@@ -97,7 +97,7 @@ module.exports = {
         tc_highlight: "#E5E5E588", // Semi-transparent white for highlights
 
         // Overlay
-        tc_ol_1: "rgba(20, 20, 20, 0.5)", // Dark overlay
+        tc_ol_1: "rgba(20, 20, 20, 0.75)", // Dark overlay
       },
 
       backgroundImage: {

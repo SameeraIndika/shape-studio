@@ -20,6 +20,7 @@ import {
 import "react-resizable/css/styles.css";
 
 import { Button } from "@/components/buttons/Button";
+import ModalPopup from "@/components/modals/ModalPopup";
 
 type Shape = {
   id: number;
@@ -34,6 +35,9 @@ export default function Canvas() {
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [history, setHistory] = useState<Shape[][]>([]);
   const [redoStack, setRedoStack] = useState<Shape[][]>([]);
+  const [currentProject, setCurrentProject] = useState<string | null>(null);
+  const [savedProjects, setSavedProjects] = useState<string[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const savedShapes = localStorage.getItem("designShapes");
@@ -43,6 +47,16 @@ export default function Canvas() {
   useEffect(() => {
     localStorage.setItem("designShapes", JSON.stringify(shapes));
   }, [shapes]);
+
+  // Create new Project
+  const createNewProject = () => {
+    setShapes([]);
+  };
+
+  // Open saved Project
+  const openSavedProject = () => {
+    setIsModalOpen((prev) => !prev);
+  };
 
   // Add shape
   const addShape = (type: "rectangle" | "circle" | "triangle") => {
@@ -124,6 +138,27 @@ export default function Canvas() {
     localStorage.removeItem("designShapes");
   };
 
+  // Save design
+  const saveDesign = () => {
+    const existingProjects = JSON.parse(
+      localStorage.getItem("designProjects") || "{}"
+    );
+
+    if (currentProject) {
+      existingProjects[currentProject] = shapes;
+      localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+      alert("Design updated!");
+    } else {
+      const projectName = prompt("Enter project name:");
+      if (!projectName) return;
+
+      existingProjects[projectName] = shapes;
+      localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+      setCurrentProject(projectName);
+      alert("Design saved!");
+    }
+  };
+
   // Download design as PNG
   const downloadCanvasAsPNG = async () => {
     const canvasElement = document.getElementById("canvas-area");
@@ -138,42 +173,18 @@ export default function Canvas() {
     }
   };
 
-  const [currentProject, setCurrentProject] = useState<string | null>(null);
-
-  // Modified saveDesign function
-  const saveDesign = () => {
-    const existingProjects = JSON.parse(
-      localStorage.getItem("designProjects") || "{}"
-    );
-
-    if (currentProject) {
-      // If there's an existing project loaded, update it without prompting
-      existingProjects[currentProject] = shapes;
-      localStorage.setItem("designProjects", JSON.stringify(existingProjects));
-      alert("Design updated!");
-    } else {
-      // If it's a new project, prompt for a name
-      const projectName = prompt("Enter project name:");
-      if (!projectName) return;
-
-      existingProjects[projectName] = shapes;
-      localStorage.setItem("designProjects", JSON.stringify(existingProjects));
-      setCurrentProject(projectName); // Set the current project after saving it
-      alert("Design saved!");
-    }
-  };
-
-  // Function to load a design and set it as the current project
+  // Load saved project
   const loadDesign = (projectName: string) => {
     const existingProjects = JSON.parse(
       localStorage.getItem("designProjects") || "{}"
     );
     if (existingProjects[projectName]) {
       setShapes(existingProjects[projectName]);
-      setCurrentProject(projectName); // Set the current project when loading
+      setCurrentProject(projectName);
     }
   };
 
+  // Delete saved project
   const deleteDesign = (projectName: string) => {
     const existingProjects = JSON.parse(
       localStorage.getItem("designProjects") || "{}"
@@ -183,8 +194,6 @@ export default function Canvas() {
     alert("Design deleted!");
   };
 
-  const [savedProjects, setSavedProjects] = useState<string[]>([]);
-
   // Load saved project names when the component mounts
   useEffect(() => {
     const existingProjects = JSON.parse(
@@ -193,226 +202,246 @@ export default function Canvas() {
     setSavedProjects(Object.keys(existingProjects));
   }, [shapes]);
 
-  // Create new Project
-  const createNewProject = () => {
-    setShapes([]);
+  // Close modal popup
+  const closeModalPopup = () => {
+    setIsModalOpen(false);
   };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between w-full min-h-[calc(100vh+120px)] 2xl:min-h-[calc(100vh-120px)] gap-4">
-      <div className="relative flex flex-col sm:justify-between w-full sm:w-24 h-fit sm:h-full rounded-lg gap-4 p-4 bg-tc_black bg-opacity-40">
-        <div className="flex sm:flex-col w-full gap-4">
-          <Button
-            type="button"
-            buttonWidthClass="w-16 sm:w-full"
-            buttonHeightClass="h-16"
-            colorvariant="primary"
-            toolTipId="rectangle"
-            helpText="Rectangle"
-            icon={Square}
-            iconPosition="center"
-            iconWidth={34}
-            iconHeight={34}
-            onClick={() => addShape("rectangle")}
-          />
-          <Button
-            type="button"
-            buttonWidthClass="w-16 sm:w-full"
-            buttonHeightClass="h-16"
-            colorvariant="primary"
-            toolTipId="circle"
-            helpText="Circle"
-            icon={Circle}
-            iconPosition="center"
-            iconWidth={34}
-            iconHeight={34}
-            onClick={() => addShape("circle")}
-          />
-          <Button
-            type="button"
-            buttonWidthClass="w-16 sm:w-full"
-            buttonHeightClass="h-16"
-            colorvariant="primary"
-            toolTipId="triangle"
-            helpText="Triangle"
-            icon={Triangle}
-            iconPosition="center"
-            iconWidth={34}
-            iconHeight={34}
-            onClick={() => addShape("triangle")}
-          />
-        </div>
-      </div>
-      <div className="relative flex flex-col w-full h-full gap-y-4 px-5 py-4 rounded-lg bg-tc_black bg-opacity-40">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-4">
-          <h2 className="flex w-full font-semibold text-xl text-tc_accent capitalize">
-            Shape Studio Design Editor
-          </h2>
-          <div className="flex justify-between sm:justify-end w-full gap-1 sm:gap-4">
+    <>
+      <div className="flex flex-col sm:flex-row sm:justify-between w-full min-h-[calc(100vh+120px)] 2xl:min-h-[calc(100vh-120px)] gap-4">
+        <div className="relative flex flex-col sm:justify-between w-full sm:w-24 h-fit sm:h-full rounded-lg gap-4 p-4 bg-tc_black bg-opacity-40">
+          <div className="flex sm:flex-col w-full gap-4">
             <Button
               type="button"
-              buttonWidthClass="w-10"
-              buttonHeightClass="h-10"
-              colorvariant="success"
-              toolTipId="create-new"
-              helpText="Create New"
-              icon={Plus}
+              buttonWidthClass="w-16 sm:w-full"
+              buttonHeightClass="h-16"
+              colorvariant="primary"
+              toolTipId="rectangle"
+              helpText="Rectangle"
+              icon={Square}
               iconPosition="center"
               iconWidth={34}
               iconHeight={34}
-              onClick={createNewProject}
+              onClick={() => addShape("rectangle")}
             />
             <Button
               type="button"
-              buttonWidthClass="w-10"
-              buttonHeightClass="h-10"
-              colorvariant="warning"
-              toolTipId="my-projects"
-              helpText="My Projects"
-              icon={Folder}
+              buttonWidthClass="w-16 sm:w-full"
+              buttonHeightClass="h-16"
+              colorvariant="primary"
+              toolTipId="circle"
+              helpText="Circle"
+              icon={Circle}
               iconPosition="center"
               iconWidth={34}
               iconHeight={34}
-              // onClick={createNewProject}
+              onClick={() => addShape("circle")}
             />
             <Button
               type="button"
-              buttonWidthClass="w-10"
-              buttonHeightClass="h-10"
-              colorvariant="info"
-              toolTipId="undo"
-              helpText="Undo"
-              icon={Undo}
+              buttonWidthClass="w-16 sm:w-full"
+              buttonHeightClass="h-16"
+              colorvariant="primary"
+              toolTipId="triangle"
+              helpText="Triangle"
+              icon={Triangle}
               iconPosition="center"
               iconWidth={34}
               iconHeight={34}
-              onClick={undo}
-            />
-            <Button
-              type="button"
-              buttonWidthClass="w-10"
-              buttonHeightClass="h-10"
-              colorvariant="info"
-              toolTipId="redo"
-              helpText="Redo"
-              icon={Redo}
-              iconPosition="center"
-              iconWidth={34}
-              iconHeight={34}
-              onClick={redo}
-            />
-            <Button
-              type="button"
-              buttonWidthClass="w-10"
-              buttonHeightClass="h-10"
-              colorvariant="error"
-              toolTipId="reset"
-              helpText="Reset"
-              icon={RotateCcw}
-              iconPosition="center"
-              iconWidth={34}
-              iconHeight={34}
-              onClick={resetCanvas}
-            />
-            <Button
-              type="button"
-              buttonWidthClass="w-10"
-              buttonHeightClass="h-10"
-              colorvariant="success"
-              toolTipId="save"
-              helpText="Save"
-              icon={Save}
-              iconPosition="center"
-              iconWidth={34}
-              iconHeight={34}
-              onClick={saveDesign}
-            />
-            <Button
-              type="button"
-              buttonWidthClass="w-10"
-              buttonHeightClass="h-10"
-              colorvariant="success"
-              toolTipId="download"
-              helpText="Download"
-              icon={Download}
-              iconPosition="center"
-              iconWidth={34}
-              iconHeight={34}
-              onClick={downloadCanvasAsPNG}
+              onClick={() => addShape("triangle")}
             />
           </div>
         </div>
-        {/* List Saved Designs */}
-        <div>
-          <h3 className="text-white font-semibold">Saved Designs</h3>
-          {savedProjects.length === 0 ? (
-            <p className="text-gray-400 text-sm">No saved designs</p>
-          ) : (
-            savedProjects.map((project) => (
-              <div key={project} className="flex justify-between items-center">
-                <button
-                  className="text-blue-400"
-                  onClick={() => loadDesign(project)}
-                >
-                  {project}
-                </button>
-                <button
-                  className="text-red-400 ml-2"
-                  onClick={() => deleteDesign(project)}
-                >
-                  ✖
-                </button>
-              </div>
-            ))
-          )}
-        </div>
-        <div
-          id="canvas-area"
-          className="border-2 border-dashed border-tc_accent w-full h-full rounded-lg relative bg-transparent"
-        >
-          {shapes.map((shape) => (
-            <Draggable
-              key={shape.id}
-              position={{ x: shape.x, y: shape.y }}
-              onStop={(e, data) => handleDrag(shape.id, data.x, data.y)}
-              bounds="#canvas-area"
-              cancel=".react-resizable-handle"
-            >
-              <div style={{ position: "absolute", left: 0, top: 0 }}>
-                <ResizableBox
-                  width={shape.width}
-                  height={shape.height}
-                  axis="both"
-                  resizeHandles={["se"]}
-                  onResizeStop={(e, data) => handleResize(shape.id, e, data)}
-                >
-                  <div
-                    className={`${
-                      shape.type === "circle"
-                        ? "rounded-full"
-                        : shape.type === "triangle"
-                        ? "clip-triangle"
-                        : ""
-                    }`}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      backgroundColor:
+        <div className="relative flex flex-col w-full h-full gap-y-4 px-5 py-4 rounded-lg bg-tc_black bg-opacity-40">
+          <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-4">
+            <h2 className="flex w-full font-semibold text-xl text-tc_accent capitalize">
+              Shape Studio Design Editor
+            </h2>
+            <div className="flex justify-between sm:justify-end w-full gap-1 sm:gap-4">
+              <Button
+                type="button"
+                buttonWidthClass="w-10"
+                buttonHeightClass="h-10"
+                colorvariant="success"
+                toolTipId="create-new"
+                helpText="Create New"
+                icon={Plus}
+                iconPosition="center"
+                iconWidth={34}
+                iconHeight={34}
+                onClick={createNewProject}
+              />
+              <Button
+                type="button"
+                buttonWidthClass="w-10"
+                buttonHeightClass="h-10"
+                colorvariant="warning"
+                toolTipId="my-projects"
+                helpText="My Projects"
+                icon={Folder}
+                iconPosition="center"
+                iconWidth={34}
+                iconHeight={34}
+                onClick={openSavedProject}
+              />
+              <Button
+                type="button"
+                buttonWidthClass="w-10"
+                buttonHeightClass="h-10"
+                colorvariant="info"
+                toolTipId="undo"
+                helpText="Undo"
+                icon={Undo}
+                iconPosition="center"
+                iconWidth={34}
+                iconHeight={34}
+                onClick={undo}
+              />
+              <Button
+                type="button"
+                buttonWidthClass="w-10"
+                buttonHeightClass="h-10"
+                colorvariant="info"
+                toolTipId="redo"
+                helpText="Redo"
+                icon={Redo}
+                iconPosition="center"
+                iconWidth={34}
+                iconHeight={34}
+                onClick={redo}
+              />
+              <Button
+                type="button"
+                buttonWidthClass="w-10"
+                buttonHeightClass="h-10"
+                colorvariant="error"
+                toolTipId="reset"
+                helpText="Reset"
+                icon={RotateCcw}
+                iconPosition="center"
+                iconWidth={34}
+                iconHeight={34}
+                onClick={resetCanvas}
+              />
+              <Button
+                type="button"
+                buttonWidthClass="w-10"
+                buttonHeightClass="h-10"
+                colorvariant="success"
+                toolTipId="save"
+                helpText="Save"
+                icon={Save}
+                iconPosition="center"
+                iconWidth={34}
+                iconHeight={34}
+                onClick={saveDesign}
+              />
+              <Button
+                type="button"
+                buttonWidthClass="w-10"
+                buttonHeightClass="h-10"
+                colorvariant="success"
+                toolTipId="download"
+                helpText="Download"
+                icon={Download}
+                iconPosition="center"
+                iconWidth={34}
+                iconHeight={34}
+                onClick={downloadCanvasAsPNG}
+              />
+            </div>
+          </div>
+
+          <div
+            id="canvas-area"
+            className="border-2 border-dashed border-tc_accent w-full h-full rounded-lg relative bg-transparent"
+          >
+            {shapes.map((shape) => (
+              <Draggable
+                key={shape.id}
+                position={{ x: shape.x, y: shape.y }}
+                onStop={(e, data) => handleDrag(shape.id, data.x, data.y)}
+                bounds="#canvas-area"
+                cancel=".react-resizable-handle"
+              >
+                <div style={{ position: "absolute", left: 0, top: 0 }}>
+                  <ResizableBox
+                    width={shape.width}
+                    height={shape.height}
+                    axis="both"
+                    resizeHandles={["se"]}
+                    onResizeStop={(e, data) => handleResize(shape.id, e, data)}
+                  >
+                    <div
+                      className={`${
                         shape.type === "circle"
-                          ? "#00c696"
-                          : shape.type === "rectangle"
-                          ? "#6366f1"
+                          ? "rounded-full"
                           : shape.type === "triangle"
-                          ? "#FFFF00"
-                          : "#ffffff",
-                    }}
-                  />
-                </ResizableBox>
-              </div>
-            </Draggable>
-          ))}
+                          ? "clip-triangle"
+                          : ""
+                      }`}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor:
+                          shape.type === "circle"
+                            ? "#00c696"
+                            : shape.type === "rectangle"
+                            ? "#6366f1"
+                            : shape.type === "triangle"
+                            ? "#FFFF00"
+                            : "#ffffff",
+                      }}
+                    />
+                  </ResizableBox>
+                </div>
+              </Draggable>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
+      {isModalOpen && (
+        <ModalPopup
+          title="Your saved projects"
+          closeButton
+          onCancel={closeModalPopup}
+          actionButtonLabel="Yes, Delete"
+          actionButtonColorVarient="error"
+          // onAction={() => handleOnDeleteTransaction(selectedTransaction)}
+          isOpen={isModalOpen}
+        >
+          <div>
+            <h3 className="text-white font-semibold">Saved Designs</h3>
+            {savedProjects.length === 0 ? (
+              <p className="text-gray-400 text-sm">No saved designs</p>
+            ) : (
+              savedProjects.map((project) => (
+                <div
+                  key={project}
+                  className="flex justify-between items-center"
+                >
+                  <button
+                    className="text-blue-400"
+                    onClick={() => {
+                      loadDesign(project);
+                      setIsModalOpen(false);
+                    }}
+                  >
+                    {project}
+                  </button>
+                  <button
+                    className="text-red-400 ml-2"
+                    onClick={() => deleteDesign(project)}
+                  >
+                    ✖
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
+        </ModalPopup>
+      )}
+    </>
   );
 }
