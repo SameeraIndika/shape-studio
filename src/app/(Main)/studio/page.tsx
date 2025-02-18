@@ -66,6 +66,7 @@ export default function Canvas() {
   // Create new Project
   const createNewProject = () => {
     setShapes([]);
+    setCurrentProject(null);
   };
 
   // Open saved Project
@@ -161,10 +162,13 @@ export default function Canvas() {
     );
 
     if (currentProject) {
+      // If project already exists, update it and show success message
       existingProjects[currentProject] = shapes;
       localStorage.setItem("designProjects", JSON.stringify(existingProjects));
       toastAlert("Design updated successfully!", ToastVarient.SUCCESS);
     } else {
+      // If no current project, show modal for new project name
+      setProjectName("");
       setModalType("newProject");
       setIsModalOpen(true);
     }
@@ -189,6 +193,7 @@ export default function Canvas() {
       return;
     }
 
+    // Save the new project and set it as the current project
     existingProjects[projectName] = shapes;
     localStorage.setItem("designProjects", JSON.stringify(existingProjects));
     setCurrentProject(projectName);
