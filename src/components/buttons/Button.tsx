@@ -106,7 +106,13 @@ export const Button = ({
         type={type}
         className={`      
       flex items-center gap-x-1 rounded-md transition-all duration-200 ease-linear font-medium text-15 capitalize whitespace-nowrap
-      ${isLink ? "" : "h-10 py-2 px-4"}
+      ${
+        isLink
+          ? ""
+          : !label && iconPosition == "center"
+          ? "py-1.5 px-1.5"
+          : "h-10 py-2 px-4"
+      }
       ${
         iconPosition == "left"
           ? "justify-start"

@@ -8,8 +8,11 @@ import { ResizableBox } from "react-resizable";
 import {
   Circle,
   Download,
+  Folder,
+  Plus,
   Redo,
   RotateCcw,
+  Save,
   Square,
   Triangle,
   Undo,
@@ -134,41 +137,47 @@ export default function Canvas() {
       link.click();
     }
   };
-  
+
   const [currentProject, setCurrentProject] = useState<string | null>(null);
 
   // Modified saveDesign function
-const saveDesign = () => {
-  const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+  const saveDesign = () => {
+    const existingProjects = JSON.parse(
+      localStorage.getItem("designProjects") || "{}"
+    );
 
-  if (currentProject) {
-    // If there's an existing project loaded, update it without prompting
-    existingProjects[currentProject] = shapes;
-    localStorage.setItem("designProjects", JSON.stringify(existingProjects));
-    alert("Design updated!");
-  } else {
-    // If it's a new project, prompt for a name
-    const projectName = prompt("Enter project name:");
-    if (!projectName) return;
+    if (currentProject) {
+      // If there's an existing project loaded, update it without prompting
+      existingProjects[currentProject] = shapes;
+      localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+      alert("Design updated!");
+    } else {
+      // If it's a new project, prompt for a name
+      const projectName = prompt("Enter project name:");
+      if (!projectName) return;
 
-    existingProjects[projectName] = shapes;
-    localStorage.setItem("designProjects", JSON.stringify(existingProjects));
-    setCurrentProject(projectName);  // Set the current project after saving it
-    alert("Design saved!");
-  }
-};
-  
+      existingProjects[projectName] = shapes;
+      localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+      setCurrentProject(projectName); // Set the current project after saving it
+      alert("Design saved!");
+    }
+  };
+
   // Function to load a design and set it as the current project
-const loadDesign = (projectName: string) => {
-  const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
-  if (existingProjects[projectName]) {
-    setShapes(existingProjects[projectName]);
-    setCurrentProject(projectName);  // Set the current project when loading
-  }
-};
-  
+  const loadDesign = (projectName: string) => {
+    const existingProjects = JSON.parse(
+      localStorage.getItem("designProjects") || "{}"
+    );
+    if (existingProjects[projectName]) {
+      setShapes(existingProjects[projectName]);
+      setCurrentProject(projectName); // Set the current project when loading
+    }
+  };
+
   const deleteDesign = (projectName: string) => {
-    const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
+    const existingProjects = JSON.parse(
+      localStorage.getItem("designProjects") || "{}"
+    );
     delete existingProjects[projectName];
     localStorage.setItem("designProjects", JSON.stringify(existingProjects));
     alert("Design deleted!");
@@ -176,41 +185,23 @@ const loadDesign = (projectName: string) => {
 
   const [savedProjects, setSavedProjects] = useState<string[]>([]);
 
-// Load saved project names when the component mounts
-useEffect(() => {
-  const existingProjects = JSON.parse(localStorage.getItem("designProjects") || "{}");
-  setSavedProjects(Object.keys(existingProjects));
-}, [shapes]);
-  // new project
-const newProject = () => {
-  const confirmNew = window.confirm("Are you sure you want to start a new project? Unsaved changes will be lost!");
-  if (confirmNew) {
-    setShapes([]); // Clear the canvas
-  }
-};
+  // Load saved project names when the component mounts
+  useEffect(() => {
+    const existingProjects = JSON.parse(
+      localStorage.getItem("designProjects") || "{}"
+    );
+    setSavedProjects(Object.keys(existingProjects));
+  }, [shapes]);
 
+  // Create new Project
+  const createNewProject = () => {
+    setShapes([]);
+  };
 
   return (
-    <div className="flex flex-col sm:flex-row sm:justify-between w-full min-h-[calc(100vh-0px)] gap-4">
+    <div className="flex flex-col sm:flex-row sm:justify-between w-full min-h-[calc(100vh+120px)] 2xl:min-h-[calc(100vh-120px)] gap-4">
       <div className="relative flex flex-col sm:justify-between w-full sm:w-24 h-fit sm:h-full rounded-lg gap-4 p-4 bg-tc_black bg-opacity-40">
         <div className="flex sm:flex-col w-full gap-4">
-        <Button
-  type="button"
-  buttonWidthClass="w-16 sm:w-full"
-  buttonHeightClass="h-16"
-  colorvariant="error"
-  helpText="New Project"
-  onClick={newProject}
-/>
-
-        <Button
-        type="button"
-        buttonWidthClass="w-16 sm:w-full"
-        buttonHeightClass="h-16"
-        colorvariant="success"
-        helpText="Save Design"
-        onClick={saveDesign}
-      />
           <Button
             type="button"
             buttonWidthClass="w-16 sm:w-full"
@@ -251,83 +242,130 @@ const newProject = () => {
             onClick={() => addShape("triangle")}
           />
         </div>
-        <div className="flex sm:flex-col w-full gap-4">
-          <Button
-            type="button"
-            buttonWidthClass="w-16 sm:w-full"
-            buttonHeightClass="h-16"
-            colorvariant="info"
-            toolTipId="undo"
-            helpText="Undo"
-            icon={Undo}
-            iconPosition="center"
-            iconWidth={34}
-            iconHeight={34}
-            onClick={undo}
-          />
-          <Button
-            type="button"
-            buttonWidthClass="w-16 sm:w-full"
-            buttonHeightClass="h-16"
-            colorvariant="info"
-            toolTipId="redo"
-            helpText="Redo"
-            icon={Redo}
-            iconPosition="center"
-            iconWidth={34}
-            iconHeight={34}
-            onClick={redo}
-          />
-          <Button
-            type="button"
-            buttonWidthClass="w-16 sm:w-full"
-            buttonHeightClass="h-16"
-            colorvariant="error"
-            toolTipId="reset"
-            helpText="Reset"
-            icon={RotateCcw}
-            iconPosition="center"
-            iconWidth={34}
-            iconHeight={34}
-            onClick={resetCanvas}
-          />
-          <Button
-            type="button"
-            buttonWidthClass="w-16 sm:w-full"
-            buttonHeightClass="h-16"
-            colorvariant="success"
-            toolTipId="download"
-            helpText="Download"
-            icon={Download}
-            iconPosition="center"
-            iconWidth={34}
-            iconHeight={34}
-            onClick={downloadCanvasAsPNG}
-          />
+      </div>
+      <div className="relative flex flex-col w-full h-full gap-y-4 px-5 py-4 rounded-lg bg-tc_black bg-opacity-40">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center w-full gap-4">
+          <h2 className="flex w-full font-semibold text-xl text-tc_accent capitalize">
+            Shape Studio Design Editor
+          </h2>
+          <div className="flex justify-between sm:justify-end w-full gap-1 sm:gap-4">
+            <Button
+              type="button"
+              buttonWidthClass="w-10"
+              buttonHeightClass="h-10"
+              colorvariant="success"
+              toolTipId="create-new"
+              helpText="Create New"
+              icon={Plus}
+              iconPosition="center"
+              iconWidth={34}
+              iconHeight={34}
+              onClick={createNewProject}
+            />
+            <Button
+              type="button"
+              buttonWidthClass="w-10"
+              buttonHeightClass="h-10"
+              colorvariant="warning"
+              toolTipId="my-projects"
+              helpText="My Projects"
+              icon={Folder}
+              iconPosition="center"
+              iconWidth={34}
+              iconHeight={34}
+              // onClick={createNewProject}
+            />
+            <Button
+              type="button"
+              buttonWidthClass="w-10"
+              buttonHeightClass="h-10"
+              colorvariant="info"
+              toolTipId="undo"
+              helpText="Undo"
+              icon={Undo}
+              iconPosition="center"
+              iconWidth={34}
+              iconHeight={34}
+              onClick={undo}
+            />
+            <Button
+              type="button"
+              buttonWidthClass="w-10"
+              buttonHeightClass="h-10"
+              colorvariant="info"
+              toolTipId="redo"
+              helpText="Redo"
+              icon={Redo}
+              iconPosition="center"
+              iconWidth={34}
+              iconHeight={34}
+              onClick={redo}
+            />
+            <Button
+              type="button"
+              buttonWidthClass="w-10"
+              buttonHeightClass="h-10"
+              colorvariant="error"
+              toolTipId="reset"
+              helpText="Reset"
+              icon={RotateCcw}
+              iconPosition="center"
+              iconWidth={34}
+              iconHeight={34}
+              onClick={resetCanvas}
+            />
+            <Button
+              type="button"
+              buttonWidthClass="w-10"
+              buttonHeightClass="h-10"
+              colorvariant="success"
+              toolTipId="save"
+              helpText="Save"
+              icon={Save}
+              iconPosition="center"
+              iconWidth={34}
+              iconHeight={34}
+              onClick={saveDesign}
+            />
+            <Button
+              type="button"
+              buttonWidthClass="w-10"
+              buttonHeightClass="h-10"
+              colorvariant="success"
+              toolTipId="download"
+              helpText="Download"
+              icon={Download}
+              iconPosition="center"
+              iconWidth={34}
+              iconHeight={34}
+              onClick={downloadCanvasAsPNG}
+            />
+          </div>
         </div>
-      </div>
-      <div className="relative flex flex-col w-full h-full gap-y-4 p-4 rounded-lg bg-tc_black bg-opacity-40">
-        <h2 className="font-semibold text-xl text-tc_accent capitalize">
-          Shape Studio Design Editor
-        </h2>
         {/* List Saved Designs */}
-      <div>
-        <h3 className="text-white font-semibold">Saved Designs</h3>
-        {savedProjects.length === 0 ? (
-          <p className="text-gray-400 text-sm">No saved designs</p>
-        ) : (
-          savedProjects.map((project) => (
-            <div key={project} className="flex justify-between items-center">
-              <button className="text-blue-400" onClick={() => loadDesign(project)}>
-                {project}
-              </button>
-              <button className="text-red-400 ml-2" onClick={() => deleteDesign(project)}>
-                ✖
-              </button>
-            </div>
-          ))
-        )}
-      </div>
+        <div>
+          <h3 className="text-white font-semibold">Saved Designs</h3>
+          {savedProjects.length === 0 ? (
+            <p className="text-gray-400 text-sm">No saved designs</p>
+          ) : (
+            savedProjects.map((project) => (
+              <div key={project} className="flex justify-between items-center">
+                <button
+                  className="text-blue-400"
+                  onClick={() => loadDesign(project)}
+                >
+                  {project}
+                </button>
+                <button
+                  className="text-red-400 ml-2"
+                  onClick={() => deleteDesign(project)}
+                >
+                  ✖
+                </button>
+              </div>
+            ))
+          )}
+        </div>
         <div
           id="canvas-area"
           className="border-2 border-dashed border-tc_accent w-full h-full rounded-lg relative bg-transparent"
