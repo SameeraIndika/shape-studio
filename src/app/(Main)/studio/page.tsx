@@ -43,14 +43,22 @@ export default function Canvas() {
 
   // Add shape
   const addShape = (type: "rectangle" | "circle" | "triangle") => {
+    const padding = 20;
+    const baseX = 50;
+    const baseY = 50;
+
+    const lastShape = shapes[shapes.length - 1];
+    const newX = lastShape ? lastShape.x + lastShape.width + padding : baseX;
+    const newY = lastShape ? lastShape.y + padding : baseY;
     const newShape: Shape = {
       id: Date.now(),
       type,
-      x: 100,
-      y: 100,
+      x: newX,
+      y: newY,
       width: 100,
       height: 100,
     };
+
     setHistory([...history, shapes]);
     setRedoStack([]);
     setShapes([...shapes, newShape]);
@@ -239,6 +247,7 @@ export default function Canvas() {
               key={shape.id}
               position={{ x: shape.x, y: shape.y }}
               onStop={(e, data) => handleDrag(shape.id, data.x, data.y)}
+              bounds="#canvas-area"
               cancel=".react-resizable-handle"
             >
               <div style={{ position: "absolute", left: 0, top: 0 }}>
