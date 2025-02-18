@@ -1,5 +1,8 @@
 import React from "react";
+
 import { LucideIcon } from "lucide-react";
+
+import { TooltipComponent } from "../custom/TooltipComponent";
 
 // Color variant types
 export type ColorVariantType =
@@ -65,6 +68,8 @@ export interface IButtonProps {
   buttonWidthClass?: string;
   buttonHeightClass?: string;
   label?: string;
+  toolTipId?: string;
+  helpText?: string;
   icon?: LucideIcon;
   iconPosition?: "left" | "right" | "center";
   iconWidth?: number;
@@ -79,6 +84,8 @@ export const Button = ({
   buttonWidthClass = "w-fit",
   buttonHeightClass,
   label,
+  toolTipId,
+  helpText,
   icon: Icon,
   iconPosition = "left",
   iconWidth = 22,
@@ -87,10 +94,11 @@ export const Button = ({
   ...props
 }: IButtonProps) => {
   return (
-    <button
-      {...props}
-      type={type}
-      className={`      
+    <TooltipComponent id={toolTipId} content={helpText}>
+      <button
+        {...props}
+        type={type}
+        className={`      
       flex items-center gap-x-1 rounded-md transition-all duration-200 ease-linear font-medium text-15 capitalize whitespace-nowrap
       ${isLink ? "" : "h-10 py-2 px-4"}
       ${
@@ -105,18 +113,19 @@ export const Button = ({
       ${getColorVariant(
         colorvariant
       )} ${buttonWidthClass} ${buttonHeightClass}`}
-      onClick={onClick}
-    >
-      {Icon && iconPosition == "left" && (
-        <Icon width={iconWidth} height={iconHeight} />
-      )}
-      {label && label}{" "}
-      {Icon && iconPosition == "center" && (
-        <Icon width={iconWidth} height={iconHeight} />
-      )}
-      {Icon && iconPosition == "right" && (
-        <Icon width={iconWidth} height={iconHeight} />
-      )}
-    </button>
+        onClick={onClick}
+      >
+        {Icon && iconPosition == "left" && (
+          <Icon width={iconWidth} height={iconHeight} />
+        )}
+        {label && label}{" "}
+        {Icon && iconPosition == "center" && (
+          <Icon width={iconWidth} height={iconHeight} />
+        )}
+        {Icon && iconPosition == "right" && (
+          <Icon width={iconWidth} height={iconHeight} />
+        )}
+      </button>
+    </TooltipComponent>
   );
 };

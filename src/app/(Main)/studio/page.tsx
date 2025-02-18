@@ -128,6 +128,8 @@ export default function Canvas() {
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
             colorvariant="primary"
+            toolTipId="rectangle"
+            helpText="Rectangle"
             icon={Square}
             iconPosition="center"
             iconWidth={34}
@@ -139,6 +141,8 @@ export default function Canvas() {
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
             colorvariant="primary"
+            toolTipId="circle"
+            helpText="Circle"
             icon={Circle}
             iconPosition="center"
             iconWidth={34}
@@ -152,6 +156,8 @@ export default function Canvas() {
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
             colorvariant="primary"
+            toolTipId="undo"
+            helpText="Undo"
             icon={Undo}
             iconPosition="center"
             iconWidth={34}
@@ -163,6 +169,8 @@ export default function Canvas() {
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
             colorvariant="primary"
+            toolTipId="redo"
+            helpText="Redo"
             icon={Redo}
             iconPosition="center"
             iconWidth={34}
@@ -174,6 +182,8 @@ export default function Canvas() {
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
             colorvariant="primary"
+            toolTipId="reset"
+            helpText="Reset"
             icon={RotateCcw}
             iconPosition="center"
             iconWidth={34}
@@ -185,6 +195,8 @@ export default function Canvas() {
             buttonWidthClass="w-16 sm:w-full"
             buttonHeightClass="h-16"
             colorvariant="primary"
+            toolTipId="download"
+            helpText="Download"
             icon={Download}
             iconPosition="center"
             iconWidth={34}
