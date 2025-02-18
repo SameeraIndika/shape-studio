@@ -105,7 +105,9 @@ export const Button = ({
         {...props}
         type={type}
         className={`      
-      flex items-center gap-x-1 rounded-md transition-all duration-200 ease-linear font-medium text-15 capitalize whitespace-nowrap
+      flex ${
+        !Icon ? "justify-center" : ""
+      } items-center gap-x-1 rounded-md transition-all duration-200 ease-linear font-medium text-15 capitalize whitespace-nowrap
       ${
         isLink
           ? ""

@@ -60,10 +60,6 @@ module.exports = {
         tc_muted: "#d1d5db", // Muted gray
         tc_white: "#FFFFFF", // Pure white
         tc_black: "#000000", // Pure black
-        // tc_transparent: rgba(0, 0, 0, 0), // Transparent
-
-        tc_background_light: "#f6f9ff", // Light gray for background
-        tc_background_dark: "#f0f0f0", // Medium gray for surfaces
 
         // Text colors
         tc_text_primary: "#333333", // Dark black text
@@ -87,8 +83,8 @@ module.exports = {
           green: "#00c696", // Creamy green
           yellow: "#FFFF00", // Creamy yellow
           indigo: "#484C7F", // Soft indigo
-          red: "#E05353",
-          blue: "#4A90E2",
+          red: "#E05353", // Soft red
+          blue: "#4A90E2", // Sky blue
           orange: "#D6883E", // Muted orange
         },
 
@@ -100,11 +96,6 @@ module.exports = {
         tc_ol_1: "rgba(20, 20, 20, 0.75)", // Dark overlay
       },
 
-      backgroundImage: {
-        // 'auth-pattern': 'linear-gradient(45deg, #473888 0%, #7C62EE 100%)',
-        "border-pattern":
-          "linear-gradient(to right, #37C6DE, #F39E3E, #EA407D, #C2D527)",
-      },
       boxShadow: {
         "ds-1": "0 5px 10px 0 rgba(30, 41, 59, 0.05)",
         "ds-2": "0 2px 4.6px 0 rgba(22, 51, 98, 0.08)",

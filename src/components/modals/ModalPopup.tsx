@@ -123,9 +123,9 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
                 {cancelButton && (
                   <Button
                     type="button"
-                    label="No, Cancel"
+                    label="Cancel"
                     buttonWidthClass="w-full"
-                    colorvariant="outline-primary"
+                    colorvariant="error"
                     onClick={onCancel}
                   />
                 )}

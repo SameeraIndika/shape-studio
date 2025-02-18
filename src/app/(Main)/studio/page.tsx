@@ -41,6 +41,10 @@ export default function Canvas() {
   const [currentProject, setCurrentProject] = useState<string | null>(null);
   const [savedProjects, setSavedProjects] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<
+    string | "viewprojects" | "newProject"
+  >("");
+  const [projectName, setProjectName] = useState("");
 
   useEffect(() => {
     const savedShapes = localStorage.getItem("designShapes");
@@ -58,6 +62,7 @@ export default function Canvas() {
 
   // Open saved Project
   const openSavedProject = () => {
+    setModalType("viewProjects");
     setIsModalOpen((prev) => !prev);
   };
 
@@ -152,14 +157,35 @@ export default function Canvas() {
       localStorage.setItem("designProjects", JSON.stringify(existingProjects));
       toastAlert("Design updated successfully!", ToastVarient.SUCCESS);
     } else {
-      const projectName = prompt("Enter project name:");
-      if (!projectName) return;
-
-      existingProjects[projectName] = shapes;
-      localStorage.setItem("designProjects", JSON.stringify(existingProjects));
-      setCurrentProject(projectName);
-      toastAlert("Design saved successfully!", ToastVarient.SUCCESS);
+      setModalType("newProject");
+      setIsModalOpen(true);
     }
+  };
+
+  // Save a new project
+  const handleSaveProject = () => {
+    if (!projectName.trim()) {
+      toastAlert("Project name cannot be empty!", ToastVarient.ERROR);
+      return;
+    }
+
+    const existingProjects = JSON.parse(
+      localStorage.getItem("designProjects") || "{}"
+    );
+
+    if (existingProjects[projectName]) {
+      toastAlert(
+        "Project name already exists. Choose a different name.",
+        ToastVarient.ERROR
+      );
+      return;
+    }
+
+    existingProjects[projectName] = shapes;
+    localStorage.setItem("designProjects", JSON.stringify(existingProjects));
+    setCurrentProject(projectName);
+    setIsModalOpen(false);
+    toastAlert("Design saved successfully!", ToastVarient.SUCCESS);
   };
 
   // Download design as PNG
@@ -207,6 +233,7 @@ export default function Canvas() {
 
   // Close modal popup
   const closeModalPopup = () => {
+    setModalType("");
     setIsModalOpen(false);
   };
 
@@ -408,39 +435,69 @@ export default function Canvas() {
       {/* Modal Popup */}
       {isModalOpen && (
         <ModalPopup
-          title="Your saved projects"
+          title={
+            modalType === "viewProjects"
+              ? "Your saved projects"
+              : modalType === "newProject"
+              ? "Save new project"
+              : ""
+          }
           closeButton
+          cancelButton={modalType === "newProject"}
           onCancel={closeModalPopup}
+          actionButton={modalType === "newProject"}
+          actionButtonLabel="Save Project"
+          actionButtonColorVarient="success"
+          onAction={handleSaveProject}
           isOpen={isModalOpen}
         >
-          <div className="flex flex-col w-full gap-y-2">
-            {savedProjects.length === 0 ? (
-              <p className="w-full px-4 py-8 font-sans text-15 font-normal text-tc_text_accent text-center">
-                No saved designs
-              </p>
-            ) : (
-              savedProjects.map((project) => (
-                <div
-                  key={project}
-                  onClick={() => {
-                    loadDesign(project);
-                    setIsModalOpen(false);
-                  }}
-                  className="flex justify-between items-center w-full gap-x-2 px-4 py-2 rounded-md border border-tc_border/10 bg-tc_black/50 hover:bg-tc_black/60 font-sans text-15 font-normal text-tc_text_accent cursor-pointer transition-all duration-200 ease-linear"
-                >
-                  {project}
-                  <div className="flex text-tc_error">
-                    <button
-                      onClick={() => deleteDesign(project)}
-                      className="flex justify-center items-center w-5 h-5"
-                    >
-                      <X width={16} height={16} />
-                    </button>
+          {/* Saved Project */}
+          {modalType == "viewProjects" && (
+            <div className="flex flex-col w-full gap-y-2">
+              {savedProjects.length === 0 ? (
+                <p className="w-full px-4 py-8 font-sans text-15 font-normal text-tc_text_accent text-center">
+                  No saved designs
+                </p>
+              ) : (
+                savedProjects.map((project) => (
+                  <div
+                    key={project}
+                    onClick={() => {
+                      loadDesign(project);
+                      setIsModalOpen(false);
+                    }}
+                    className="flex justify-between items-center w-full gap-x-2 px-4 py-2 rounded-md border border-tc_border/10 bg-tc_black/50 hover:bg-tc_black/60 font-sans text-15 font-normal text-tc_text_accent cursor-pointer transition-all duration-200 ease-linear"
+                  >
+                    {project}
+                    <div className="flex text-tc_error">
+                      <button
+                        onClick={() => deleteDesign(project)}
+                        className="flex justify-center items-center w-5 h-5"
+                      >
+                        <X width={16} height={16} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))
-            )}
-          </div>
+                ))
+              )}
+            </div>
+          )}
+
+          {/* Save New Project */}
+          {modalType == "newProject" && (
+            <div className="flex flex-col w-full gap-y-1.5">
+              <label className="font-medium text-15 text-tc_text_accent capitalize">
+                Enter Project Name
+              </label>
+              <input
+                type="text"
+                value={projectName}
+                onChange={(e) => setProjectName(e.target.value)}
+                placeholder="Project name"
+                className="flex items-center w-full h-10 px-3 rounded-md border border-tc_border/20 focus:!border-tc_secondary focus:!outline-none focus:!ring-1 focus:!ring-tc_secondary bg-tc_black/20 font-normal text-15 text-tc_text_accent"
+              />
+            </div>
+          )}
         </ModalPopup>
       )}
 
