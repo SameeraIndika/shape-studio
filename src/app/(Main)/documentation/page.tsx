@@ -139,7 +139,7 @@ export default function Documentation() {
         <p className="w-full font-normal text-15 text-tc_muted">
           To start the Next.js development server, run the following command:
         </p>
-        <CodeBlock code="npm install" language={"javascript"} />
+        <CodeBlock code="npm run dev" language={"javascript"} />
         <p className="w-full font-normal text-15 text-tc_muted">
           Or if you are using Yarn:
         </p>
