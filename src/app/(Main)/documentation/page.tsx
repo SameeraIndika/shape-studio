@@ -25,7 +25,7 @@ export default function Documentation() {
           Before you begin, make sure you have the following installed on your
           local machine:
         </p>
-        <ul className="list-disc flex flex-col w-full gap-y-2 ml-8 font-normal text-15 text-tc_muted">
+        <ul className="list-disc flex flex-col w-full gap-y-2 ml-8 pr-4 font-normal text-15 text-tc_muted">
           <li>
             <strong>Node.js (Recommended version: v16.x or higher)</strong>
             <br />
@@ -34,7 +34,8 @@ export default function Documentation() {
               <a
                 href="https://nodejs.org/en"
                 target="_blank"
-                className="text-tc_custom-purple"
+                className="mx-1 text-tc_custom-purple"
+                style={{ overflowWrap: "anywhere" }}
               >
                 https://nodejs.org/en
               </a>
@@ -49,7 +50,8 @@ export default function Documentation() {
               <a
                 href="https://git-scm.com/"
                 target="_blank"
-                className="text-tc_custom-purple"
+                className="mx-1 text-tc_custom-purple"
+                style={{ overflowWrap: "anywhere" }}
               >
                 https://git-scm.com/
               </a>
@@ -63,7 +65,8 @@ export default function Documentation() {
               <a
                 href="https://code.visualstudio.com/"
                 target="_blank"
-                className="text-tc_custom-purple"
+                className="mx-1 text-tc_custom-purple"
+                style={{ overflowWrap: "anywhere" }}
               >
                 https://code.visualstudio.com/
               </a>
@@ -85,7 +88,6 @@ export default function Documentation() {
         <CodeBlock
           code="git clone https://github.com/SameeraIndika/shape-studio.git"
           language={"javascript"}
-          // showLineNumbers
         />
         <p className="flex w-full font-normal text-15 text-tc_muted">
           After cloning, navigate to the project folder:
@@ -115,18 +117,18 @@ export default function Documentation() {
 
       {/* Run the Development Server */}
       <section className="flex flex-col w-full h-fit gap-y-4 p-5 rounded-lg bg-tc_black/40">
-        <h3 className="flex w-full font-medium text-lg text-tc_accent capitalize">
+        <h3 className="w-full font-medium text-lg text-tc_accent capitalize">
           Step 3: Run the Development Server
         </h3>
-        <p className="flex w-full font-normal text-15 text-tc_muted">
+        <p className="w-full font-normal text-15 text-tc_muted">
           To start the Next.js development server, run the following command:
         </p>
         <CodeBlock code="npm install" language={"javascript"} />
-        <p className="flex w-full font-normal text-15 text-tc_muted">
+        <p className="w-full font-normal text-15 text-tc_muted">
           Or if you are using Yarn:
         </p>
         <CodeBlock code="yarn dev" language={"javascript"} />
-        <p className="flex w-full font-normal text-15 text-tc_muted">
+        <p className="w-full font-normal text-15 text-tc_muted">
           This will start the server on{" "}
           <a
             href="http://localhost:3000"
