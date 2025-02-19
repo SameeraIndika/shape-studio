@@ -50,6 +50,7 @@ const Header = () => {
               key={index}
               className="font-medium text-15 text-nowrap text-tc_white hover:text-tc_accent transition-all duration-200 ease-linear"
               href={item.href}
+              onClick={() => setIsMobileMenuVisible(false)}
             >
               {item.label}
             </Link>
