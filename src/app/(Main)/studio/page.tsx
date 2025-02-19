@@ -14,6 +14,7 @@ import {
   RotateCcw,
   Save,
   Square,
+  Trash,
   Triangle,
   Undo,
   X,
@@ -43,7 +44,7 @@ export default function Canvas() {
   const [savedProjects, setSavedProjects] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<
-    string | "viewprojects" | "newProject"
+    string | "viewprojects" | "newProject" | "deleteProject"
   >("");
   const [projectName, setProjectName] = useState("");
 
@@ -229,12 +230,21 @@ export default function Canvas() {
 
   // Delete saved project
   const deleteDesign = (projectName: string) => {
+    setProjectName(projectName);
+    setModalType("deleteProject");
+    setIsModalOpen(true);
+  };
+
+  // Confirm delete project
+  const confirmDelete = () => {
     const existingProjects = JSON.parse(
       localStorage.getItem("designProjects") || "{}"
     );
     delete existingProjects[projectName];
     localStorage.setItem("designProjects", JSON.stringify(existingProjects));
-    alert("Design deleted!");
+    setSavedProjects(Object.keys(existingProjects));
+    toastAlert("Project deleted successfully!", ToastVarient.SUCCESS);
+    closeModalPopup();
   };
 
   // Close modal popup
@@ -446,16 +456,42 @@ export default function Canvas() {
               ? "Your saved projects"
               : modalType === "newProject"
               ? "Save new project"
+              : modalType === "deleteProject"
+              ? "Delete project ?"
               : ""
           }
+          message={
+            modalType === "deleteProject"
+              ? "Are you sure? You want to delete this project?"
+              : null
+          }
+          icon={modalType === "deleteProject" ? Trash : null}
+          iconColor="tc_error"
           closeButton
-          cancelButton={modalType === "newProject"}
+          cancelButton={
+            modalType === "newProject" || modalType === "deleteProject"
+          }
           onCancel={closeModalPopup}
-          actionButton={modalType === "newProject"}
-          actionButtonLabel="Save Project"
+          actionButton={
+            modalType === "newProject" || modalType === "deleteProject"
+          }
+          actionButtonLabel={
+            modalType === "newProject"
+              ? "Save Project"
+              : modalType === "deleteProject"
+              ? "Delete Project"
+              : ""
+          }
           actionButtonColorVarient="success"
-          onAction={handleSaveProject}
+          onAction={
+            modalType === "newProject"
+              ? handleSaveProject
+              : modalType === "deleteProject"
+              ? confirmDelete
+              : undefined
+          }
           isOpen={isModalOpen}
+          modalType={modalType}
         >
           {/* Saved Project */}
           {modalType == "viewProjects" && (
@@ -477,7 +513,10 @@ export default function Canvas() {
                     {project}
                     <div className="flex text-tc_error">
                       <button
-                        onClick={() => deleteDesign(project)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteDesign(project);
+                        }}
                         className="flex justify-center items-center w-5 h-5"
                       >
                         <X width={16} height={16} />

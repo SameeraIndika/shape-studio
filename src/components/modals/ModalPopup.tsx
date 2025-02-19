@@ -8,9 +8,9 @@ import { Button, ColorVariantType } from "../buttons/Button";
 
 interface ModalContainerProps {
   title?: string;
-  icon?: LucideIcon;
+  icon?: LucideIcon | null;
   iconColor?: string;
-  message?: string;
+  message?: string | null;
   closeButton?: boolean;
   onClose?: () => void;
   cancelButton?: boolean;
@@ -22,6 +22,7 @@ interface ModalContainerProps {
   isOpen?: boolean;
   popupWidthClass?: string;
   children?: ReactNode;
+  modalType?: any;
 }
 
 const ModalContainer: React.FC<ModalContainerProps> = ({
@@ -40,6 +41,7 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
   isOpen,
   popupWidthClass,
   children,
+  modalType,
 }) => {
   const [showModalPopup, setShowModalPopup] = useState(isOpen);
 
@@ -93,20 +95,20 @@ const ModalContainer: React.FC<ModalContainerProps> = ({
                 </div>
               </div>
               {(Icon || message) && (
-                <div className="relative flex flex-col justify-center items-center w-full h-fit px-4 py-10 gap-y-4 border-b border-tc_border/60">
+                <div className="relative flex flex-col justify-center items-center w-full h-fit px-4 py-10 gap-y-4">
                   <div
                     className={`flex justify-center items-center w-16 h-16 rounded-full bg-${iconColor} bg-opacity-20`}
                   >
                     {Icon && <Icon className={`w-7 h-7 text-${iconColor}`} />}
                   </div>
                   {message && (
-                    <span className="w-full font-sans text-15 font-normal text-tc_text_primary text-center">
+                    <span className="w-full font-sans text-15 font-normal text-tc_text_accent text-center">
                       {message}
                     </span>
                   )}
                 </div>
               )}
-              {children && (
+              {children && modalType !== "deleteProject" && (
                 <div
                   className={`relative flex flex-col w-full max-h-[calc(100vh-400px)] px-4 py-5 gap-y-4 overflow-y-auto ${
                     cancelButton || actionButton ? "border-b" : "border-none"
