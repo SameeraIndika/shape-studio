@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import "react-resizable/css/styles.css";
 
+import PageLoader from "@/components/spinners/PageLoader";
 import ModalPopup from "@/components/modals/ModalPopup";
 import ToastyAlertContainer from "@/components/spinners/ToastyAlertContainer";
 import { Button } from "@/components/buttons/Button";
@@ -37,6 +38,7 @@ type Shape = {
 };
 
 export default function Canvas() {
+  const [showPageLoader, setShowPageLoader] = useState(true);
   const [shapes, setShapes] = useState<Shape[]>([]);
   const [history, setHistory] = useState<Shape[][]>([]);
   const [redoStack, setRedoStack] = useState<Shape[][]>([]);
@@ -47,6 +49,15 @@ export default function Canvas() {
     string | "viewprojects" | "newProject" | "deleteProject"
   >("");
   const [projectName, setProjectName] = useState("");
+
+  // Show page loader
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPageLoader(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     const savedShapes = localStorage.getItem("designShapes");
@@ -252,6 +263,10 @@ export default function Canvas() {
     setModalType("");
     setIsModalOpen(false);
   };
+
+  if (showPageLoader) {
+    return <PageLoader />;
+  }
 
   return (
     <>

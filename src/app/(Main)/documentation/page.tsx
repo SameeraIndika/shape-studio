@@ -1,10 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 
+import PageLoader from "@/components/spinners/PageLoader";
 import CodeBlock from "@/components/custom/CodeBlock";
 
 export default function Documentation() {
+  const [showPageLoader, setShowPageLoader] = useState(true);
+
+  // Show page loader
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPageLoader(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (showPageLoader) {
+    return <PageLoader />;
+  }
+
   return (
     <div className="relative flex flex-col w-full gap-y-6 px-5 py-4 rounded-lg bg-tc_black bg-opacity-40">
       <h2 className="flex w-full font-semibold text-xl text-tc_accent capitalize">
